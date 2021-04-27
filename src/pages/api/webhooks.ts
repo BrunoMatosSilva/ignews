@@ -10,7 +10,7 @@ async function buffer(readable: Readable) {
     for await (const chunk of readable) {
         chunks.push(
             typeof chunk === "string" ? Buffer.from(chunk) : chunk
-        );
+        )
     }
 
     return Buffer.concat(chunks);
@@ -23,13 +23,13 @@ export const config = {
 }
 
 const relevantEvents = new Set([
-    'checkout.session.completed'
+    'checkout.session.completed',
 ])
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const buf = await buffer(req)
-        const secret = req.headers['stripe-signature']
+        const secret = req.headers['stripe-signature'];
 
         let event: Stripe.Event;
 
@@ -50,7 +50,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
                         await saveSubscription(
                             checkoutSession.subscription.toString(),
-                            checkoutSession.customer.toString()
+                            checkoutSession.customer.toString(),
                         )
 
                         break;
@@ -58,7 +58,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         throw new Error('Unhandled event.')
                 }
             } catch (err) {
-                return res.json({ error: 'Webhook handler failed.' });
+                return res.json({ error: 'Webhook handler failed.' })
             }
         }
 
